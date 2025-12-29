@@ -1,0 +1,207 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// أنواع المستخدمين
+enum UserRole {
+  CITIZEN // مواطن
+  EMPLOYEE // موظف جهة حكومية
+  ADMIN // مشرف عام
+}
+
+// حالات الشكوى
+enum ComplaintStatus {
+  NEW // جديدة
+  IN_PROGRESS // قيد المعالجة
+  COMPLETED // منجزة
+  REJECTED // مرفوضة
+}
+
+// جدول المستخدمين
+model User {
+  id         String   @id @default(uuid())
+  phone      String?  @unique
+  email      String?  @unique
+  password   String
+  name       String
+  role       UserRole @default(CITIZEN)
+  isVerified Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // العلاقات
+  complaints         Complaint[] // الشكاوى المقدمة (للمواطنين)
+  assignedComplaints Complaint[]    @relation("AssignedEmployee") // الشكاوى المعينة (للموظفين)
+  comments           Comment[]
+  notifications      Notification[]
+  otpCodes           OtpCode[]
+  logs               AuditLog[]
+  department         Department?    @relation(fields: [departmentId], references: [id])
+  departmentId       String?
+
+  @@index([email])
+  @@index([phone])
+}
+
+// جدول الجهات الحكومية
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  employees  User[]
+  complaints Complaint[]
+}
+
+// جدول الشكاوى
+model Complaint {
+  id              String          @id @default(uuid())
+  referenceNumber String          @unique // رقم مرجعي
+  type            String // نوع الشكوى
+  location        String // الموقع
+  description     String // وصف المشكلة
+  status          ComplaintStatus @default(NEW)
+  priority        Int             @default(1) // 1-5
+  isLocked        Boolean         @default(false) // محجوزة للمعالجة
+  lockedBy        String? // معرف الموظف الذي حجزها
+  lockedAt        DateTime? // وقت الحجز
+  resolvedAt      DateTime? // وقت الحل
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // العلاقات
+  citizen   User   @relation(fields: [citizenId], references: [id])
+  citizenId String
+
+  department   Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?
+
+  assignedEmployee   User?   @relation("AssignedEmployee", fields: [assignedEmployeeId], references: [id])
+  assignedEmployeeId String?
+
+  attachments   Attachment[]
+  comments      Comment[]
+  history       ComplaintHistory[]
+  notifications Notification[]
+
+  @@index([citizenId])
+  @@index([departmentId])
+  @@index([status])
+  @@index([referenceNumber])
+}
+
+// جدول المرفقات (الصور والمستندات)
+model Attachment {
+  id           String   @id @default(uuid())
+  filename     String
+  originalName String
+  mimeType     String
+  size         Int
+  path         String
+  createdAt    DateTime @default(now())
+
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  complaintId String
+
+  @@index([complaintId])
+}
+
+// جدول التعليقات والملاحظات
+model Comment {
+  id         String   @id @default(uuid())
+  content    String
+  isInternal Boolean  @default(false) // ملاحظة داخلية أم مرئية للمواطن
+  createdAt  DateTime @default(now())
+
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  complaintId String
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  @@index([complaintId])
+}
+
+// جدول تاريخ التغييرات (Versioning)
+model ComplaintHistory {
+  id          String   @id @default(uuid())
+  action      String // نوع التغيير (تحديث حالة، إضافة ملاحظة، إلخ)
+  oldValue    String? // القيمة القديمة
+  newValue    String? // القيمة الجديدة
+  description String?
+  createdAt   DateTime @default(now())
+
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  complaintId String
+
+  performedBy String // معرف المستخدم الذي قام بالتغيير
+
+  @@index([complaintId])
+  @@index([createdAt])
+}
+
+// جدول الإشعارات
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  type      String // نوع الإشعار (شكوى جديدة، تحديث حالة، إلخ)
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  complaint   Complaint? @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  complaintId String?
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+// جدول رموز التحقق OTP
+model OtpCode {
+  id        String   @id @default(uuid())
+  code      String
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  purpose   String // registration, login, password_reset
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([code])
+}
+
+// جدول سجل التدقيق (Audit Log)
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String // نوع العملية
+  entity    String // نوع الكيان (User, Complaint, إلخ)
+  entityId  String // معرف الكيان
+  details   String? // تفاصيل إضافية (JSON)
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
