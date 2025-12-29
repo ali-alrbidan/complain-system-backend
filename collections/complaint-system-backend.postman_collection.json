@@ -1,0 +1,791 @@
+{
+	"info": {
+		"_postman_id": "d25a9971-5270-4aa2-8b47-e71115a2ae50",
+		"name": "complaint-system-backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50606850"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Verify_Otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"35a309e7-c628-4325-be39-67d458779600\",\r\n    \"code\": \"985879\",\r\n    \"purpose\": \"registration\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/auth/verify-otp",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"auth",
+								"verify-otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"ali3@gmail.com\",\r\n  \"password\": \"123456\",\r\n  \"name\": \"alrbidan علي\",\r\n  \"role\": \"EMPLOYEE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/auth/register",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"ali@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/auth/login",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resend-otp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"aacccb48-2d35-4850-b665-4f4a53de4529\",\r\n    \"purpose\": \"registration\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/auth/resend-otp",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"auth",
+								"resend-otp"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "complaints",
+			"item": [
+				{
+					"name": "Add_Complaint",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYzJhOTlkNC05YTVlLTQ4YTMtODIzZi04N2Q1YzRhNDBiOTkiLCJlbWFpbCI6ImFsYWRhbWF0YWxpQGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQ0lUSVpFTiIsImlhdCI6MTc2NjkzMDkzMywiZXhwIjoxNzY3NTM1NzMzfQ.4QY6IlZuKhsuvM2A4PWlM1pcqmriwxu25iLEgql9E2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \"type\": \"تلف في الطريق\",\r\n  \"location\": \"شارع الثورة، دمشق\",\r\n  \"description\": \"يوجد حفرة كبيرة في منتصف الطريق تشكل خطراً على المركبات\",\r\n  \"priority\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/complaints",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"complaints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_Complaints",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5MzU3OTEsImV4cCI6MTc2NzU0MDU5MX0.Z0kWWwNEDEln9Yu6VroYWDYye5D1ZyktC94PfHtHoi0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/complaints?page=1&limit=10&status=NEW",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"complaints"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "status",
+									"value": "NEW"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one complaint",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYzJhOTlkNC05YTVlLTQ4YTMtODIzZi04N2Q1YzRhNDBiOTkiLCJlbWFpbCI6ImFsYWRhbWF0YWxpQGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQ0lUSVpFTiIsImlhdCI6MTc2NjkzMDkzMywiZXhwIjoxNzY3NTM1NzMzfQ.4QY6IlZuKhsuvM2A4PWlM1pcqmriwxu25iLEgql9E2o",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/complaints/e62f6f6a-5766-4ce4-bb38-c341dc3c0b86",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"complaints",
+								"e62f6f6a-5766-4ce4-bb38-c341dc3c0b86"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "lock complaint",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5MzU3OTEsImV4cCI6MTc2NzU0MDU5MX0.Z0kWWwNEDEln9Yu6VroYWDYye5D1ZyktC94PfHtHoi0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/complaints/e62f6f6a-5766-4ce4-bb38-c341dc3c0b86/lock",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"complaints",
+								"e62f6f6a-5766-4ce4-bb38-c341dc3c0b86",
+								"lock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n  \"content\": \"تم استلام الشكوى وجاري المعالجة\",\r\n  \"isInternal\": false\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/complaints/e62f6f6a-5766-4ce4-bb38-c341dc3c0b86/comments",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"complaints",
+								"e62f6f6a-5766-4ce4-bb38-c341dc3c0b86",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add files",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "statistics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5MzU3OTEsImV4cCI6MTc2NzU0MDU5MX0.Z0kWWwNEDEln9Yu6VroYWDYye5D1ZyktC94PfHtHoi0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/complaints/statistics",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"complaints",
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "departments",
+			"item": [
+				{
+					"name": "add department",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5NDU1NjYsImV4cCI6MTc2NzU1MDM2Nn0.6TUobNiWkBX_f_YHTL44mjFPDj6NGjYivB_avL4BmlI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"وزارة الأشغال العامة\",\r\n  \"description\": \"مسؤولة عن صيانة الطرق والبنية التحتية\",\r\n  \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/departments",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all departments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/departments",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get active departments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/departments/active",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments",
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "assign employee to department",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5NDU1NjYsImV4cCI6MTc2NzU1MDM2Nn0.6TUobNiWkBX_f_YHTL44mjFPDj6NGjYivB_avL4BmlI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"35a309e7-c628-4325-be39-67d458779600\",\r\n    \"departmentId\": \"277e1961-a859-45cf-b172-865c47fdcda4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/departments/assign-employee",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments",
+								"assign-employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "جلب موظفي جهة",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5NDU1NjYsImV4cCI6MTc2NzU1MDM2Nn0.6TUobNiWkBX_f_YHTL44mjFPDj6NGjYivB_avL4BmlI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/departments/277e1961-a859-45cf-b172-865c47fdcda4/employees",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments",
+								"277e1961-a859-45cf-b172-865c47fdcda4",
+								"employees"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "جلب شكاوى جهة معينة",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNWEzMDllNy1jNjI4LTQzMjUtYmUzOS02N2Q0NTg3Nzk2MDAiLCJlbWFpbCI6ImFsaUBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbCwicm9sZSI6IkVNUExPWUVFIiwiaWF0IjoxNzY2OTQ4ODkzLCJleHAiOjE3Njc1NTM2OTN9.tvAH5CHP2FQo1YVyUs9WHbJT-YKP4NF984l3q39QpGo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/departments/277e1961-a859-45cf-b172-865c47fdcda4/complaints",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments",
+								"277e1961-a859-45cf-b172-865c47fdcda4",
+								"complaints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "جلب تقرير شامل عن الجهة",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNWEzMDllNy1jNjI4LTQzMjUtYmUzOS02N2Q0NTg3Nzk2MDAiLCJlbWFpbCI6ImFsaUBnbWFpbC5jb20iLCJwaG9uZSI6bnVsbCwicm9sZSI6IkVNUExPWUVFIiwiaWF0IjoxNzY2OTQ4ODkzLCJleHAiOjE3Njc1NTM2OTN9.tvAH5CHP2FQo1YVyUs9WHbJT-YKP4NF984l3q39QpGo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/departments/277e1961-a859-45cf-b172-865c47fdcda4/report",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"departments",
+								"277e1961-a859-45cf-b172-865c47fdcda4",
+								"report"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "إنشاء موظف او مواطن جديد (كمشرف)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5Njk1ODcsImV4cCI6MTc2NzU3NDM4N30.lcq8PZcFqcLBgl0IeVjTKz4Dm5_fUO02yesHG8bjSNs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"employee@gov.sy\",\r\n  \"password\": \"123456\",\r\n  \"name\": \"ahmad الموظف\",\r\n  \"role\": \"EMPLOYEE\",\r\n  \"departmentId\": \"277e1961-a859-45cf-b172-865c47fdcda4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/users",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(جلب جميع المستخدمين (للمشرف",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5Njk1ODcsImV4cCI6MTc2NzU3NDM4N30.lcq8PZcFqcLBgl0IeVjTKz4Dm5_fUO02yesHG8bjSNs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users?role=ADMIN&search=علي",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "ADMIN"
+								},
+								{
+									"key": "search",
+									"value": "علي"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(جلب إحصائيات المستخدمين (للمشرف",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5Njk1ODcsImV4cCI6MTc2NzU3NDM4N30.lcq8PZcFqcLBgl0IeVjTKz4Dm5_fUO02yesHG8bjSNs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users/statistics",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"statistics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "جلب مستخدم واحد (للمشرف)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5Njk1ODcsImV4cCI6MTc2NzU3NDM4N30.lcq8PZcFqcLBgl0IeVjTKz4Dm5_fUO02yesHG8bjSNs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users/f9d8001d-3a27-4abb-a321-bce676dddb07",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"f9d8001d-3a27-4abb-a321-bce676dddb07"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "حذف (تعطيل) مستخدف (للمشرف)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhM2EyY2Q1OC0yODE4LTRjNmUtOGFhZC0yN2NhNDYyZjJiYjUiLCJlbWFpbCI6ImFsYWRhbWF0QGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NjY5Njk1ODcsImV4cCI6MTc2NzU3NDM4N30.lcq8PZcFqcLBgl0IeVjTKz4Dm5_fUO02yesHG8bjSNs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users/5b93f61a-1080-4ea4-a0aa-0dc60efb7cc7",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"5b93f61a-1080-4ea4-a0aa-0dc60efb7cc7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تحديث مستخدمتحديث مستخدم (للمشرف",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "جلب الملف الشخصي للمستخدم الحالي",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/users/profile",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تحديث الملف الشخصي",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"aladamat2@gmail.com\",\r\n    \"phone\":\"0994245648\",\r\n    \"name\":\"ahmad ahlammad\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/users/profile",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "تغيير كلمة المرور",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\":\"123456\",\r\n    \"newPassword\":\"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/users/change-password",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"users",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwYzJhOTlkNC05YTVlLTQ4YTMtODIzZi04N2Q1YzRhNDBiOTkiLCJlbWFpbCI6ImFsYWRhbWF0YWxpQGdtYWlsLmNvbSIsInBob25lIjpudWxsLCJyb2xlIjoiQ0lUSVpFTiIsImlhdCI6MTc2NjkzMDkzMywiZXhwIjoxNzY3NTM1NzMzfQ.4QY6IlZuKhsuvM2A4PWlM1pcqmriwxu25iLEgql9E2o",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "api",
+			"value": "http://localhost:3000/api",
+			"type": "string"
+		}
+	]
+}
