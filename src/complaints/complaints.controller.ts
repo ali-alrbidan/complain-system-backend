@@ -107,4 +107,12 @@ export class ComplaintsController {
   remove(@Param('id') id: string, @CurrentUser() user: any) {
     return this.complaintsService.remove(id, user.role);
   }
+
+  @Get('statistics/monthly')
+  @Roles(UserRole.EMPLOYEE, UserRole.ADMIN)
+  async getMonthlyStatistics(@Query('months') months?: string) {
+    return this.complaintsService.getMonthlyStatistics(
+      months ? parseInt(months) : 6,
+    );
+  }
 }

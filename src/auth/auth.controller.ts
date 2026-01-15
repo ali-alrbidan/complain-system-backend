@@ -1,10 +1,20 @@
 // src/auth/auth.controller.ts
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  Get,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { LoginDto } from './dto/login.dto';
 import { ResendOtpDto } from './dto/resend-otp.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('/auth')
 export class AuthController {
@@ -38,5 +48,19 @@ export class AuthController {
       resendOtpDto.userId,
       resendOtpDto.purpose,
     );
+  }
+  // جلب معلومات المستخدم الحالي (Auth/Me)
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getCurrentUser(@CurrentUser() user: any) {
+    return this.authService.getCurrentUser(user.id);
+  }
+
+  // التحقق من صلاحية التوكن (Auth/Check)
+  @Get('check')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async checkToken(@CurrentUser() user: any) {
+    return this.authService.checkToken(user.id);
   }
 }

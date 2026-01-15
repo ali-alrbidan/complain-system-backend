@@ -1,0 +1,255 @@
+# config:
+#   target: 'http://localhost:3000'
+#   timeout: 30 # زيادة الـ timeout إلى 30 ثانية
+#   http:
+#     timeout: 30
+#   phases:
+#     # المرحلة 1: زيادة تدريجية
+#     - duration: 60
+#       arrivalRate: 5
+#       rampTo: 50
+#       name: 'Warm up'
+
+#     # المرحلة 2: ضغط عالي
+#     - duration: 120
+#       arrivalRate: 100
+#       name: 'High load'
+
+#     # المرحلة 3: ذروة الحمل
+#     # - duration: 60
+#     #   arrivalRate: 200
+#     #   name: 'Peak load'
+
+#   processor: './load-test-functions.js'
+
+# scenarios:
+#   # سيناريو 1: تسجيل دخول وتصفح الشكاوى
+#   - name: 'Login and Browse Complaints'
+#     weight: 40
+#     flow:
+#       - post:
+#           url: '/api/auth/login'
+#           json:
+#             email: 'employee1@example.com'
+#             password: 'Password123!'
+#           capture:
+#             - json: '$.token.access_token'
+#               as: 'authToken'
+
+#       - get:
+#           url: '/api/complaints?page=1&limit=10'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+
+#       - think: 2
+
+#       - get:
+#           url: '/api/complaints/statistics'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+
+#   # سيناريو 2: إنشاء شكوى جديدة
+#   - name: 'Create New Complaint'
+#     weight: 30
+#     flow:
+#       - post:
+#           url: '/api/auth/login'
+#           json:
+#             email: 'citizen2@example.com'
+#             password: 'Password123!'
+#           capture:
+#             - json: '$.token.access_token'
+#               as: 'authToken'
+
+#       - post:
+#           url: '/api/complaints'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+#           json:
+#             type: 'مشكلة في الكهرباء'
+#             location: 'دمشق - المزة'
+#             description: 'انhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhقطاع متكرر للكهرباء'
+#             departmentId: '893ee946-cf17-4206-bb93-88b3bf9395ce'
+#             priority: 3
+
+#   # سيناريو 3: تحديث حالة الشكوى
+#   - name: 'Update Complaint Status'
+#     weight: 20
+#     flow:
+#       - post:
+#           url: '/api/auth/login'
+#           json:
+#             email: 'employee3@example.com'
+#             password: 'Password123!'
+#           capture:
+#             - json: '$.token.access_token'
+#               as: 'authToken'
+
+#       - get:
+#           url: '/api/complaints?status=NEW&limit=1'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+#           capture:
+#             - json: '$.data[0].id'
+#               as: 'complaintId'
+
+#       - patch:
+#           url: '/api/complaints/{{ complaintId }}'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+#           json:
+#             status: 'IN_PROGRESS'
+
+#   # سيناريو 4: مراقبة الأداء
+#   - name: 'Admin Monitoring'
+#     weight: 10
+#     flow:
+#       - post:
+#           url: '/api/auth/login'
+#           json:
+#             email: 'admin@example.com'
+#             password: 'Password123!'
+#           capture:
+#             - json: '$.token.access_token'
+#               as: 'authToken'
+
+#       - get:
+#           url: '/api/users/statistics'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+
+#       - get:
+#           url: '/api/complaints/statistics/monthly'
+#           headers:
+#             Authorization: 'Bearer {{ authToken }}'
+
+config:
+  target: 'http://localhost:3000'
+  timeout: 30
+  http:
+    timeout: 30
+  phases:
+    # تقليل الحمل إذا كان الـ Login بطيئًا
+    - duration: 60
+      arrivalRate: 2 # تقليل من 5 إلى 2
+      rampTo: 20 # تقليل من 50 إلى 20
+      name: 'Warm up'
+
+    - duration: 120
+      arrivalRate: 50 # تقليل من 100 إلى 50
+      name: 'Medium load'
+
+    - duration: 60
+      arrivalRate: 100
+      name: 'Peak load'
+
+  processor: './load-test-functions.js'
+
+scenarios:
+  # سيناريو 1: تسجيل دخول وتصفح الشكاوى
+  - name: 'Login and Browse Complaints'
+    weight: 40
+    flow:
+      - post:
+          url: '/api/auth/login'
+          json:
+            email: 'employee1@example.com'
+            password: 'Password123!'
+          capture:
+            - json: '$.token.access_token'
+              as: 'authToken'
+
+      - think: 1 # تقليل وقت التفكير
+
+      - get:
+          url: '/api/complaints?page=1&limit=10'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'
+
+      - think: 1
+
+      - get:
+          url: '/api/complaints/statistics'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'
+
+  # سيناريو 2: إنشاء شكوى جديدة
+  - name: 'Create New Complaint'
+    weight: 30
+    flow:
+      - post:
+          url: '/api/auth/login'
+          json:
+            email: 'citizen2@example.com'
+            password: 'Password123!'
+          capture:
+            - json: '$.token.access_token'
+              as: 'authToken'
+
+      - think: 1
+
+      - post:
+          url: '/api/complaints'
+          headers:
+            Authorization: 'Bearer {{ authToken }}' # إصلاح: إزالة الـ } الزائدة
+          json:
+            type: 'مشكلة في الكهرباء'
+            location: 'دمشق - المزة'
+            description: 'انقطاع متكرر للكهرباء'
+            departmentId: '6108a351-dec2-4e83-b17d-f1a2c99cf369'
+            priority: 3
+
+  # سيناريو 3: تحديث حالة الشكوى
+  - name: 'Update Complaint Status'
+    weight: 20
+    flow:
+      - post:
+          url: '/api/auth/login'
+          json:
+            email: 'employee3@example.com'
+            password: 'Password123!'
+          capture:
+            - json: '$.token.access_token'
+              as: 'authToken'
+
+      - think: 1
+
+      - get:
+          url: '/api/complaints?status=NEW&limit=1'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'
+          capture:
+            - json: '$.data[0].id'
+              as: 'complaintId'
+
+      - patch:
+          url: '/api/complaints/{{ complaintId }}'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'
+          json:
+            status: 'IN_PROGRESS'
+
+  # سيناريو 4: مراقبة الأداء
+  - name: 'Admin Monitoring'
+    weight: 10
+    flow:
+      - post:
+          url: '/api/auth/login'
+          json:
+            email: 'admin@example.com'
+            password: 'Password123!'
+          capture:
+            - json: '$.token.access_token'
+              as: 'authToken'
+
+      - think: 1
+
+      - get:
+          url: '/api/users/statistics'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'
+
+      - get:
+          url: '/api/complaints/statistics/monthly'
+          headers:
+            Authorization: 'Bearer {{ authToken }}'

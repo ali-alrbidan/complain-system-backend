@@ -108,7 +108,7 @@ export class UsersService {
   async findAll(query: QueryUserDto) {
     const { role, departmentId, isActive, search, page, limit } = query;
 
-    const skip = (page! - 1) * limit!;
+    const skip = (Number(page) - 1) * Number(limit);
 
     const where: any = {};
 
@@ -127,7 +127,7 @@ export class UsersService {
       this.prisma.user.findMany({
         where,
         skip,
-        take: limit,
+        take: Number(limit),
         orderBy: { createdAt: 'desc' },
         select: {
           id: true,
@@ -160,8 +160,8 @@ export class UsersService {
       meta: {
         total,
         page,
-        limit,
-        totalPages: Math.ceil(total / limit!),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit)),
       },
     };
   }

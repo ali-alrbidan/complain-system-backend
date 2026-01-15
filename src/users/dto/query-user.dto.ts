@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -26,9 +27,11 @@ export class QueryUserDto {
 
   @IsNumber()
   @IsOptional()
+  @Type(() => Number)
   page?: number = 1;
 
   @IsNumber()
   @IsOptional()
+  @Type(() => Number)
   limit?: number = 10;
 }
